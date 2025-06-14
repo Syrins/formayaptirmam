@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" sizes="any" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
+    <meta name="theme-color" content="#4f46e5" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <title>Athletic Galaxy</title>
+    <meta name="description" content="Athletic Galaxy - Premium spor formaları ve takım malzemeleri" />
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="preconnect" href="https://apogmqakaafdsojpbulu.supabase.co" crossorigin />
+    
+    <!-- Preload critical assets -->
+    <link rel="preload" href="/src/main.tsx" as="script" fetchpriority="high" />
+    
+    <!-- Preload fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" as="style" />
+    
+    <!-- Load fonts asynchronously -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" media="print" onload="this.media='all'" />
+    
+    <!-- Prevent Flash of Unstyled Content with inlined critical CSS -->
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+      body {
+        background-color: #f8f8f8;
+        color: #333;
+      }
+      #root {
+        height: 100%;
+      }
+      /* Optimized loading animation styles */
+      .initial-loader {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        width: 100vw;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: #f8f8f8;
+        z-index: 9999;
+      }
+      .loader-spinner {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 3px solid rgba(79, 70, 229, 0.2);
+        border-top-color: #4f46e5;
+        animation: spin 1s infinite linear;
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      /* Hide elements until JS loads */
+      .js-loading * {
+        transition: opacity 0.4s ease-in;
+      }
+
+      /* Critical CSS for buttons, cards, and navigation elements */
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+      @media (min-width: 640px) {
+        .container {
+          padding: 0 2rem;
+        }
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.375rem;
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+        transition: all 0.2s;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body class="js-loading">
+    <div id="root">
+      <div class="initial-loader">
+        <div class="loader-spinner"></div>
+      </div>
+    </div>
+    
+    <!-- Defer non-critical scripts -->
+    <script type="module" src="/src/main.tsx" defer></script>
+    
+    <script>
+      // Optimized performance with passive event listeners and deferred loading
+      document.addEventListener('DOMContentLoaded', function() {
+        // Remove JS loading class once DOM is ready
+        document.body.classList.remove('js-loading');
+        
+        // Add passive listeners for improved scrolling
+        const passiveSupported = () => {
+          let passive = false;
+          try {
+            const options = Object.defineProperty({}, 'passive', {
+              get: function() { passive = true; return true; }
+            });
+            window.addEventListener('test', null, options);
+            window.removeEventListener('test', null, options);
+          } catch (err) {}
+          return passive;
+        };
+        
+        const wheelOpt = passiveSupported() ? { passive: true } : false;
+        const wheelEvents = ['mousewheel', 'wheel', 'touchstart', 'touchmove', 'scroll'];
+        
+        wheelEvents.forEach(function(event) {
+          window.addEventListener(event, function() {}, wheelOpt);
+        });
+        
+        // Lazy load JotForm widget
+        const loadJotForm = () => {
+          // Only load JotForm when user scrolls or has been on page for 3 seconds
+          const jotformScript = document.createElement('script');
+          jotformScript.src = 'https://cdn.jotfor.ms/agent/embedjs/0196dee9f1eb73068ff854d86924777642a9/embed.js?skipWelcome=1&maximizable=1';
+          jotformScript.async = true;
+          jotformScript.defer = true;
+          document.body.appendChild(jotformScript);
+          
+          // Remove event listeners once loaded
+          window.removeEventListener('scroll', checkLoadJotform);
+          clearTimeout(jotformTimer);
+        };
+        
+        // Load JotForm after a delay or on user interaction
+        const checkLoadJotform = () => {
+          if ((window.scrollY > 300) || document.querySelector('button:hover')) {
+            loadJotForm();
+          }
+        };
+        
+        window.addEventListener('scroll', checkLoadJotform, wheelOpt);
+        const jotformTimer = setTimeout(loadJotForm, 3000);
+      });
+    </script>
+  </body>
+</html>
