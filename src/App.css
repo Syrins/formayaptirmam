@@ -1,0 +1,56 @@
+
+/* Optimize core styles for faster loading */
+#root {
+  width: 100%;
+  margin: 0 auto;
+  text-align: left;
+}
+
+/* Only load animations for users who don't prefer reduced motion */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes logo-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+/* Product page specific styles - optimized */
+.product-image-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 0.5rem;
+}
+
+.product-image-thumbnail {
+  aspect-ratio: 1;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: transform 0.2s ease;
+  will-change: transform;
+}
+
+.product-image-thumbnail:hover {
+  transform: scale(1.05);
+}
+
+.product-image-thumbnail.active {
+  border-color: var(--primary);
+}
+
+.product-main-image {
+  aspect-ratio: 1;
+  width: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+  contain: paint;
+}
+
+.text-center-specific {
+  text-align: center;
+}
